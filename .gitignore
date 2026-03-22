@@ -1,12 +1,22 @@
-# Python
+# Python bytecode & cache
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+
+# Environments
 venv/
 .env
 
-# Database
+# Database (keep the schema, hide the data)
 *.db
+*.sqlite3
 
-# OS specific
+# macOS specific
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Docker logs
+*.log
+docker-compose.override.yml

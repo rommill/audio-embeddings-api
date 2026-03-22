@@ -23,7 +23,6 @@ def save_embedding(filename, embedding):
     conn.commit()
     conn.close()
 
-
 def get_all_embeddings():
     conn = sqlite3.connect('embeddings.db')
     cursor = conn.cursor()
@@ -38,3 +37,5 @@ def get_all_embeddings():
             "embedding": json.loads(row[1]) 
         })
     return results
+
+init_db()

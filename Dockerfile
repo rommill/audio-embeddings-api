@@ -1,21 +1,20 @@
 FROM python:3.12-slim
 
-# Install system dependencies for audio processing
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy requirements and install
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir setuptools==69.5.1 wheel
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the code
+ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
+
 COPY . .
 
-# Expose the port FastAPI runs on
-EXPOSE 8000
-
-# Command to run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,11 @@
+name: DevOps CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker
+        run: docker compose build
+      - name: Run Tests
+        run: docker compose run api pytest .

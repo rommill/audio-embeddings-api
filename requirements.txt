@@ -1,6 +1,10 @@
 fastapi
 uvicorn
 python-multipart
-tensorflow
 numpy
+tensorflow
+tensorflow-hub
 scipy
+setuptools
+pytest
+httpx
