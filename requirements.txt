@@ -5,6 +5,5 @@ numpy
 tensorflow
 tensorflow-hub
 scipy
-setuptools
 pytest
 httpx

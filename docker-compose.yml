@@ -4,28 +4,18 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: audio_embeddings_api
-
     platform: linux/amd64
-
     ports:
       - "8000:8000"
-
     volumes:
-      - ./embeddings.db:/app/embeddings.db
-
+      - .:/app
     environment:
       - PYTHONUNBUFFERED=1
       - TF_CPP_MIN_LOG_LEVEL=2
-
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-
     restart: always
-
-networks:
-  default:
-    name: audio_network

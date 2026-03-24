@@ -2,23 +2,29 @@ import os
 import uuid
 import numpy as np
 import logging
+import shutil
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from model import yamnet
+from model.yamnet import yamnet 
 from database import save_embedding, get_all_embeddings
 
-# (DevOps style)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Audio Embeddings API", description="AI-powered audio similarity search")
+app = FastAPI(
+    title="Audio Embeddings API", 
+    description="AI-powered audio similarity search (DevOps Project)"
+)
 
 @app.get("/")
 async def root():
-    return {"message": "Audio Embeddings API is running. Visit /docs for documentation."}
+    return {"status": "online", "message": "Audio Embeddings API is running. Visit /docs"}
 
 @app.post("/embeddings")
 async def create_embeddings(file: UploadFile = File(...)):
-   
+    
     if not file.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail=f"File {file.filename} is not an audio file")
 
@@ -28,18 +34,26 @@ async def create_embeddings(file: UploadFile = File(...)):
     try:
         
         with open(temp_path, "wb") as buffer:
-            while chunk := await file.read(1024 * 1024): 
-                buffer.write(chunk)
+            shutil.copyfileobj(file.file, buffer)
         
-        logger.info(f"Processing audio for: {file.filename}")
+        logger.info(f"Processing audio: {file.filename}")
+        
+        
         embedding = yamnet.process_audio(temp_path)
         
+        
         save_embedding(file.filename, embedding)
-        return {"status": "success", "filename": file.filename, "message": "Processed and saved"}
+        
+        return {
+            "status": "success", 
+            "filename": file.filename, 
+            "message": "Processed and saved to database"
+        }
     
     except Exception as e:
         logger.error(f"Error processing {file.filename}: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal processing error")
+        raise HTTPException(status_code=500, detail=f"Internal processing error: {str(e)}")
+    
     finally:
         
         if os.path.exists(temp_path):
@@ -55,16 +69,18 @@ async def search_embeddings(file: UploadFile = File(...), top_k: int = 5):
     
     try:
         with open(temp_path, "wb") as buffer:
-            while chunk := await file.read(1024 * 1024):
-                buffer.write(chunk)
+            shutil.copyfileobj(file.file, buffer)
+        
         
         query_vector = np.array(yamnet.process_audio(temp_path))
+        
+        
         all_data = get_all_embeddings()
         
         if not all_data:
-            return {"message": "Database is empty."}
+            return {"message": "Database is empty. Upload some files first."}
 
-        # --- (NUMPY MAGIC) vector ---
+        # ---  Numpy (Cosine Similarity) ---
         filenames = [item["filename"] for item in all_data]
         matrix = np.array([item["embedding"] for item in all_data])
 
@@ -85,6 +101,7 @@ async def search_embeddings(file: UploadFile = File(...), top_k: int = 5):
     except Exception as e:
         logger.error(f"Search error: {str(e)}")
         raise HTTPException(status_code=500, detail="Search failed")
+    
     finally:
         if os.path.exists(temp_path):
             os.remove(temp_path)

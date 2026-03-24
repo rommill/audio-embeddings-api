@@ -2,18 +2,16 @@ FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir setuptools==69.5.1 wheel
+RUN pip install --upgrade pip
+RUN pip install setuptools==69.5.1
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
 
 COPY . .
 
