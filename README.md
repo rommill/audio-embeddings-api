@@ -1,41 +1,53 @@
-# Audio Embeddings API (DevOps Project)
+# Audio Embeddings API (DevOps Project) 🎵
 
-A containerized microservice that generates and searches audio embeddings using the **YAMNet** deep learning model.
+A containerized AI-powered microservice that generates, stores, and searches audio embeddings using the **YAMNet** deep learning model.
 
-## Tech Stack
+![Web Interface Preview](ui_preview.png)
+
+## 🌟 New Feature: Web Interface
+
+The project now includes a **Streamlit-based UI**, allowing users to interact with the AI model without writing a single line of code.
+
+- **Location:** Access it at `http://localhost:8501`
+- **Features:** Real-time similarity search, database indexing, and API health monitoring.
+
+## 🛠 Tech Stack
 
 - **Language:** Python 3.12
-- **Framework:** FastAPI
-- **ML Engine:** TensorFlow 2.18 / TensorFlow Hub
-- **Database:** SQLite (with automatic schema initialization)
-- **Containerization:** Docker & Docker Compose (AMD64 platform)
+- **Frameworks:** FastAPI (Backend) & Streamlit (Frontend)
+- **ML Engine:** TensorFlow 2.18 / TensorFlow Hub (YAMNet)
+- **Database:** SQLite (Auto-initialized)
+- **Orchestration:** Docker & Docker Compose (Multi-container architecture)
 
-## Engineering Highlights
+## 🚀 Engineering Highlights
 
-- **Environment Isolation:** Successfully resolved dependency conflicts between Python 3.12 and legacy `tensorflow-hub` using custom build steps in Docker.
-- **Reliability:** Integrated Docker **Healthchecks** to monitor service availability.
-- **Stability:** Automated API testing implemented within the container environment.
+- **Microservices:** Separated concerns between Backend (API) and Frontend (UI) using Docker networking.
+- **Environment Isolation:** Resolved dependency conflicts between Python 3.12 and `tensorflow-hub` using custom build steps.
+- **Resilience:** Integrated Docker **Healthchecks** ensuring the UI waits for the heavy ML model to load before starting.
+- **CI/CD ready:** Fully automated testing suite integrated into the workflow.
 
 ## Quick Start
 
 1. **Build and Start:**
+
    ```bash
    docker compose up --build -d
    Note: The first start may take ~1 minute to load the heavy YAMNet model.
    ```
 
-Access API Documentation:
-Open http://localhost:8000/docs in your browser.
+2. **Access Points:**
+   - **User Interface:** [http://localhost:8501](http://localhost:8501)
+   - **API Documentation (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
 
-Features
-POST /embeddings: Upload a .wav file to generate and store a 1024-dimensional vector in the local database.
+## 🔍 API Features
 
-POST /search: Find the most similar audio file in the database using Cosine Similarity.
+- **POST /embeddings:** Upload a `.wav` file to generate and store a 1024-dimensional vector.
+- **POST /search:** Find the most similar audio file in the database using **Cosine Similarity**.
+- **GET /docs:** Interactive API documentation.
 
-GET /docs: Fully interactive Swagger documentation.
+## 🧪 Testing & Verification
 
-Testing
-To run infrastructure and logic tests inside the running Docker container, use the following command:
+Run logic tests inside the running container:
 
 ```bash
 docker exec -it audio_embeddings_api pytest test_main.py

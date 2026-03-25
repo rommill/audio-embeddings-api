@@ -19,3 +19,18 @@ services:
       retries: 3
       start_period: 40s
     restart: always
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    container_name: audio_ui
+    platform: linux/amd64
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: always
