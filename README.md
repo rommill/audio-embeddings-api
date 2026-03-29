@@ -1,17 +1,17 @@
-# Audio Embeddings API (DevOps Project) 🎵
+# Audio Embeddings API (DevOps Project)
 
 A containerized AI-powered microservice that generates, stores, and searches audio embeddings using the **YAMNet** deep learning model.
 
 ![Web Interface Preview](ui_preview.png)
 
-## 🌟 New Feature: Web Interface
+## New Feature: Web Interface
 
 The project now includes a **Streamlit-based UI**, allowing users to interact with the AI model without writing a single line of code.
 
 - **Location:** Access it at `http://localhost:8501`
 - **Features:** Real-time similarity search, database indexing, and API health monitoring.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Language:** Python 3.12
 - **Frameworks:** FastAPI (Backend) & Streamlit (Frontend)
@@ -19,7 +19,7 @@ The project now includes a **Streamlit-based UI**, allowing users to interact wi
 - **Database:** SQLite (Auto-initialized)
 - **Orchestration:** Docker & Docker Compose (Multi-container architecture)
 
-## 🚀 Engineering Highlights
+## Engineering Highlights
 
 - **Microservices:** Separated concerns between Backend (API) and Frontend (UI) using Docker networking.
 - **Environment Isolation:** Resolved dependency conflicts between Python 3.12 and `tensorflow-hub` using custom build steps.
@@ -39,13 +39,13 @@ The project now includes a **Streamlit-based UI**, allowing users to interact wi
    - **User Interface:** [http://localhost:8501](http://localhost:8501)
    - **API Documentation (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## 🔍 API Features
+## API Features
 
 - **POST /embeddings:** Upload a `.wav` file to generate and store a 1024-dimensional vector.
 - **POST /search:** Find the most similar audio file in the database using **Cosine Similarity**.
 - **GET /docs:** Interactive API documentation.
 
-## 🧪 Testing & Verification
+## Testing & Verification
 
 Run logic tests inside the running container:
 
